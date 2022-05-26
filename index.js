@@ -36,6 +36,15 @@ async function run() {
             const parts = await partsCollection.findOne(query);
             res.send(parts);
         })
+        app.get('/myorder/:email', async (req, res) => {
+            const email = req.params.email;
+            console.log(email)
+            const query = { clientEmail: email };
+            const orders = await orderCollection.find(query);
+            let myOrders = await orders.toArray();
+            console.log(myOrders)
+            res.send(myOrders);
+        })
 
         app.get('/companyoverview', async (req, res) => {
             const query = {}
@@ -133,6 +142,14 @@ async function run() {
             const id = req.params.id;
             const query = { _id: ObjectId(id) };
             const result = await partsCollection.deleteOne(query);
+            console.log(id)
+            res.send(result);
+        });
+        app.delete('/order/:id', async (req, res) => {
+            const id = req.params.id;
+            console.log(id)
+            const query = { _id: ObjectId(id) };
+            const result = await orderCollection.deleteOne(query);
             console.log(id)
             res.send(result);
         });
