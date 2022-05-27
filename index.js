@@ -106,6 +106,13 @@ async function run() {
             const result = await partsCollection.insertOne(newParts);
             res.send(result);
         });
+        app.post('/user', async (req, res) => {
+            const newUser = req.body;
+            const result = await userCollection.insertOne(newUser);
+            // console.log(result)
+            // console.log(req.body.email)
+            res.send(result);
+        });
         app.post('/admin', async (req, res) => {
             const newAdmin = req.body;
             const result = await adminCollection.insertOne(newAdmin);
