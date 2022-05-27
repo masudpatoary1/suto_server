@@ -88,11 +88,11 @@ async function run() {
             user = await cursor.toArray();
             res.send(user)
         })
-        app.get('/user/:email', async (req, res) => {
+        app.get('/admin/:email', async (req, res) => {
             const email = req.params.email;
             const query = { email: email };
-            const singleUser = await userCollection.findOne(query);
-            res.send(singleUser);
+            const singleAdmin = await adminCollection.findOne(query);
+            res.send(singleAdmin);
         })
 
         app.post('/order', async (req, res) => {
@@ -160,7 +160,7 @@ async function run() {
             res.send(result);
         });
 
-        app.put('/user/:email', async (req, res) => {
+        app.put('/admin/:email', async (req, res) => {
             const email = req.params.email;
             const updatedUser = await req.body;
             const filter = { email: email };
@@ -168,8 +168,8 @@ async function run() {
             const updatedDoc = {
                 $set: updatedUser
             }
-            const result = await userCollection.updateOne(filter, updatedDoc, options);
-           
+            const result = await adminCollection.updateOne(filter, updatedDoc, options);
+           console.log(result)
             res.send(result);
         })
 
