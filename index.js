@@ -116,6 +116,13 @@ async function run() {
             const result = await reviewCollection.insertOne(newReview);
             res.send(result);
         });
+        app.get('/reviewlimitlastwo', async (req, res) => {
+            const newReview = req.body;
+            const result = await reviewCollection.find(newReview).sort({$natural:-1}).limit(4);;
+            const resultforWeb= await result.toArray();
+            console.log(resultforWeb)
+            res.send(resultforWeb);
+        });
 
         app.put('/user/:id', async (req, res) => {
             const id = req.params.id;
