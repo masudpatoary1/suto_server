@@ -32,18 +32,30 @@ async function run() {
 
         app.get('/autoparts/:id', async (req, res) => {
             const id = req.params.id;
+           
             const query = { _id: ObjectId(id) };
             const parts = await partsCollection.findOne(query);
             res.send(parts);
         })
         app.get('/myorder/:email', async (req, res) => {
             const email = req.params.email;
-            console.log(email)
             const query = { clientEmail: email };
             const orders = await orderCollection.find(query);
             let myOrders = await orders.toArray();
-            console.log(myOrders)
             res.send(myOrders);
+        })
+        app.get('/order/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) };
+            const myOrder = await orderCollection.findOne(query);
+            res.send(myOrder);
+        })
+        app.get('/myreview/:email', async (req, res) => {
+            const email = req.params.email;
+            const query = { email: email };
+            const reviews = await reviewCollection.find(query);
+            let myReviews = await reviews.toArray();
+            res.send(myReviews);
         })
 
         app.get('/companyoverview', async (req, res) => {
@@ -85,25 +97,22 @@ async function run() {
 
         app.post('/order', async (req, res) => {
             const newOrder = req.body;
-            console.log(newOrder)
+            // console.log(newOrder)
             const result = await orderCollection.insertOne(newOrder);
             res.send(result);
         });
         app.post('/autoparts', async (req, res) => {
             const newParts = req.body;
-            console.log(newParts)
             const result = await partsCollection.insertOne(newParts);
             res.send(result);
         });
         app.post('/admin', async (req, res) => {
             const newAdmin = req.body;
-            console.log(newAdmin)
             const result = await adminCollection.insertOne(newAdmin);
             res.send(result);
         });
         app.post('/review', async (req, res) => {
             const newReview = req.body;
-            console.log(newReview)
             const result = await reviewCollection.insertOne(newReview);
             res.send(result);
         });
@@ -119,7 +128,6 @@ async function run() {
                 }
             }
             const result = await userCollection.updateOne(filter, updatedDoc, options);
-            console.log(result)
             res.send(result);
         })
         app.put('/autoparts/:id', async (req, res) => {
@@ -135,22 +143,20 @@ async function run() {
             }
 
             const result = await partsCollection.updateOne(filter, updatedDoc, options);
-            console.log(updatedQty)
+            // console.log(updatedQty)
             res.send(result);
         })
         app.delete('/autoparts/:id', async (req, res) => {
             const id = req.params.id;
             const query = { _id: ObjectId(id) };
             const result = await partsCollection.deleteOne(query);
-            console.log(id)
             res.send(result);
         });
         app.delete('/order/:id', async (req, res) => {
             const id = req.params.id;
-            console.log(id)
+            
             const query = { _id: ObjectId(id) };
             const result = await orderCollection.deleteOne(query);
-            console.log(id)
             res.send(result);
         });
 
@@ -163,7 +169,7 @@ async function run() {
                 $set: updatedUser
             }
             const result = await userCollection.updateOne(filter, updatedDoc, options);
-            console.log(result, 'and', updatedUser)
+           
             res.send(result);
         })
 
@@ -175,6 +181,21 @@ async function run() {
             const updatedDoc = {
                 $set: {
                     shippingStutus: status
+                }
+            }
+            const result = await orderCollection.updateOne(filter, updatedDoc, options);
+            res.send(result);
+        })
+        app.put('/order/shipping/:id', async (req, res) => {
+            const id = req.params.id;
+            console.log(id)
+            const payment = await req.body.payment;
+            console.log(await payment)
+            const filter = { _id: ObjectId(id) };
+            const options = { upsert: true };
+            const updatedDoc = {
+                $set: {
+                    paymentStutus: payment
                 }
             }
             const result = await orderCollection.updateOne(filter, updatedDoc, options);
