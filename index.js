@@ -21,6 +21,7 @@ async function run() {
         const orderCollection = await client.db('ph-manufacturing').collection('orders');
         const adminCollection = await client.db('ph-manufacturing').collection('admin');
         const userCollection = await client.db('ph-manufacturing').collection('user');
+        const CustomOrderCollection = await client.db('ph-manufacturing').collection('customOrder');
 
         //home start
         // Currently Available Parts
@@ -266,9 +267,14 @@ async function run() {
             res.send(result);
         });
 
-
-        // User Start
         // Dashboard end
+
+        //  custom order
+        app.post('/customorder', async (req, res) => {
+            const newOrder = req.body;
+            const result = await CustomOrderCollection.insertOne(newOrder);
+            res.send(result);
+        });
     }
     finally { }
 }
